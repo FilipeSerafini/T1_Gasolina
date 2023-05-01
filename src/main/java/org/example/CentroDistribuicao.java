@@ -118,22 +118,21 @@ public class CentroDistribuicao {
         // quanto de cada vai precisar
         // temos o suficioente?
 
-        SITUACAO situ = getSituacao();
+        int[] retornoArr = new int[4];
+
+        SITUACAO situacao = getSituacao();
 
         double qtdGasolina = qtdade * 0.7;
         double qtdAditivo = qtdade * 0.05;
         double qtdAlcool = qtdade * 0.25;
 
-        int qntdCombustivelDisponivel = 
-
-        int[] retornoArr = new int[4];
-
+        //caso receba valor invalido
         if (qtdade <= 0) {
             retornoArr[0] = -7;
             return retornoArr;
         }
         
-
+        //caso nao tenha combustivel suficiente para retornar
         if (qtdAditivo > gettAditivo()) {
             retornoArr[0] = -21;
             return retornoArr;
@@ -145,17 +144,42 @@ public class CentroDistribuicao {
             return retornoArr;
         }
 
-        switch(situ){
-            case NORMAL: 
+        //analisar a situacao e retornar as quantidades necessarias
+        switch(situacao){
+            case NORMAL: {
+                retornoArr[0] = tAditivo;
+                    retornoArr[1] = tGasolina;
+                    retornoArr[2] = tAlcool1;
+                    retornoArr[3] = tAlcool2;
+            }
 
             case SOBRAVISO: {
-                //qtdade solicitade tem que ser 50% do disponivel
                 if (tipoPosto == TIPOPOSTO.COMUM) {
-                    qtdade = qtdade/2;
+                    retornoArr[0] = tAditivo/2;
+                    retornoArr[1] = tGasolina/2;
+                    retornoArr[2] = tAlcool1/2;
+                    retornoArr[3] = tAlcool2/2;
+                } else if (tipoPosto == TIPOPOSTO.ESTRATEGICO) {
+                    retornoArr[0] = tAditivo;
+                    retornoArr[1] = tGasolina;
+                    retornoArr[2] = tAlcool1;
+                    retornoArr[3] = tAlcool2;
                 }
 
             }
-            case EMERGENCIA:
+            case EMERGENCIA: {
+                if (tipoPosto == TIPOPOSTO.COMUM) {
+                    retornoArr[0] = 0;
+                    retornoArr[1] = 0;
+                    retornoArr[2] = 0;
+                    retornoArr[3] = 0;
+                } else if (tipoPosto == TIPOPOSTO.ESTRATEGICO) {
+                    retornoArr[0] = tAditivo/2;
+                    retornoArr[1] = tGasolina/2;
+                    retornoArr[2] = tAlcool1/2;
+                    retornoArr[3] = tAlcool2/2;
+                }
+            }
         }
 
 
